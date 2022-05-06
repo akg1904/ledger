@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from src.resource.health_check import HealthCheck
 from src import routes
 
+
 app = Flask(__name__)
 api = Api(app)
 
