@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask-restful = "*"
 db-sqlite3 = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
