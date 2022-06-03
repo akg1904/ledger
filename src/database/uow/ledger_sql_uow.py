@@ -1,8 +1,10 @@
-from app import app
+from sqlalchemy.orm import sessionmaker
+
+from src.database.db.postgresql import PostgresDB
 from src.database.interface.sql_uow import SqlUow
 
 
-DEFAULT_SESSION_FACTORY = app.config['DB_SESSION']
+# DEFAULT_SESSION_FACTORY = app.config['DB_SESSION']
 
 
 class LedgerSqlUow(SqlUow):
@@ -10,7 +12,9 @@ class LedgerSqlUow(SqlUow):
     Ledger Unit of Work
     """
 
-    def __init__(self, session_factory=DEFAULT_SESSION_FACTORY):
+    def __init__(self, session_factory=None):
+        DB_INSTANCE = PostgresDB().get_connection()
+        session_factory = sessionmaker(bind=DB_INSTANCE)
         self.session_factory = session_factory
 
     def __enter__(self):

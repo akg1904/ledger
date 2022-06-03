@@ -7,8 +7,11 @@ class LoginService:
     def __init__(self):
         self.userRepository = UserSqlite()
 
-    def create_user(self, uow):
+    def create_user(self, data: dict, uow):
+        response = None
         with uow:
-            self.userRepository.create_user('hello', uow)
+            response = self.userRepository.create_user(data, uow)
             uow.commit()
+
+        return response
 
