@@ -18,7 +18,7 @@ class UserSqlite(UserInterface):
             INSERT INTO login_details 
                 (id, emp_id, username, password, active, tenant_id)
                 VALUES
-                (:id, :emp_id, :user_name, :password, 'true', :tenant_id) 
+                    (:id, :emp_id, :user_name, :password, 'true', :tenant_id) 
             """,
             dict(id=id, emp_id=emp_id, user_name=user_name, password=password, tenant_id=tenant_id)
         )

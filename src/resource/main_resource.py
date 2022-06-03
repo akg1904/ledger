@@ -1,11 +1,9 @@
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
 
-#creating circular dependency
 from src.bootstrap import main_bootstrap
 from src.database.interface.sql_uow import SqlUow
 from src.services.loginservice import LoginService
-
 
 uow: SqlUow = main_bootstrap.bootstrap()  #creating circular dependency
 
