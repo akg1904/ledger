@@ -2,7 +2,7 @@
 import abc
 
 
-class Sql(abc.ABC):
+class SqlUow(abc.ABC):
 
     def __enter__(self):
         return self

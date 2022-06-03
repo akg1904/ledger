@@ -1,22 +1,25 @@
 from flask_restful import Resource
 from flask import request
 
-from src.database.db.db_instance import DBInstance
-from src.services.loginservice import validate_user
+#creating circular dependency
+# from src.bootstrap import main_bootstrap
+from src.database.interface.sql_uow import SqlUow
+from src.services.loginservice import LoginService
 
-conn = DBInstance().db
-user = ' '
 
+login_service = LoginService()
+# uow: SqlUow = main_bootstrap.bootstrap()  #creating circular dependency
+uow = None
 
 class LoginResource(Resource):
 
     def get(self):
-        # data = request.get_json()
+        login_service.create_user(uow)
         return {'message': 'Login working'}
 
     def post(self):
         data = request.get_json()
         print(data)
-        response = validate_user(data)
+        response = data
 
         return response

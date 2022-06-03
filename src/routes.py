@@ -7,7 +7,6 @@ from src.resource.user import UserResource, UserDetailResource
 
 
 def set_api(api: Api):
-
     api.add_resource(HealthCheck, '/health-check')
     api.add_resource(LoginResource, '/login')
     api.add_resource(LogoutResource, '/logout')
