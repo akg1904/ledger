@@ -12,7 +12,11 @@ class UserInterface(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_user_by_id(self, id):
+    def get_user_by_emp_id(self, emp_id):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_user_by_username(self, username):
         raise NotImplementedError
 
     @abc.abstractmethod

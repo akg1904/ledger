@@ -24,15 +24,21 @@ class UserSqlite(UserInterface):
         )
         return data
 
-
     def delete_user_by_id(self, id):
         pass
 
     def update_user_by_id(self, id):
         pass
 
-    def get_user_by_id(self, id):
-        pass
+    def get_user_by_username(self, username):
+
+        response = username(
+            """
+            SELECT * FROM login_details 
+                WHERE user_name = 'test1'
+            """
+        )
+        return response
 
     def get_all_user(self):
         pass

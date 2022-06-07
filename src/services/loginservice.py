@@ -1,17 +1,10 @@
-
-from src.repository.sqlite.user import UserSqlite
+from src.repository.postgresql.user import UserPostRepository
 
 
 class LoginService:
 
     def __init__(self):
-        self.userRepository = UserSqlite()
+        self.userRepository = UserPostRepository()
 
-    def create_user(self, data: dict, uow):
-        response = None
-        with uow:
-            response = self.userRepository.create_user(data, uow)
-            uow.commit()
 
-        return response
 

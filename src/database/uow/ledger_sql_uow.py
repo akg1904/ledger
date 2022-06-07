@@ -1,4 +1,4 @@
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 
 from src.database.db.postgresql import PostgresDB
 from src.database.interface.sql_uow import SqlUow
@@ -18,7 +18,7 @@ class LedgerSqlUow(SqlUow):
         self.session_factory = session_factory
 
     def __enter__(self):
-        self.session = self.session_factory()
+        self.session: Session = self.session_factory()
         return super().__enter__()
 
     def __exit__(self, *args):

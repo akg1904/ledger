@@ -1,8 +1,13 @@
 
 import abc
 
+from sqlalchemy.orm import Session
+
 
 class SqlUow(abc.ABC):
+
+    def __init__(self):
+        self.session: Session = None
 
     def __enter__(self):
         return self
