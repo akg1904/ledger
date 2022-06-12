@@ -31,6 +31,8 @@ class LedgerSqlUow(SqlUow):
     def rollback(self):
         self.session.rollback()
 
+
+
 # app.config['DB_INSTANCE'] = PostgresDB().get_connection()
 # app.config['DB_SESSION'] = sessionmaker(bind=app.config['DB_INSTANCE'])
 # DEFAULT_SESSION_FACTORY = app.config['DB_SESSION']
