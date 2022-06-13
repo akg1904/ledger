@@ -14,7 +14,11 @@ class UserService:
             if not user:
                 emp_id = self.userRepository.create_user(data, uow)
                 uow.commit()
-                user = self.userRepository.get_all_user(uow)
+                created_user = self.userRepository.get_user_by_emp_id(emp_id, uow)
+                if not created_user:
+                    return {'message': 'Failed to create user'}
+                return created_user
+
             else:
                 return {'message': 'User already exists'}
         return user

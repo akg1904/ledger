@@ -1,5 +1,6 @@
 import uuid
 
+from src.database.entity.tables import UserEntity
 from src.database.interface.sql_uow import SqlUow
 from src.repository.interface.user import UserInterface
 
@@ -10,23 +11,27 @@ class UserPostRepository(UserInterface):
         pass
 
     def create_user(self, data: dict, uow: SqlUow):
-        id = uuid.uuid4()
-        data['id'] = str(id)
-        emp_id = data['emp_id']
-        user_name = data['user_name']
-        password = data['password']
-        tenant_id = data['tenant_id']
-
-        uow.session.execute(
-            """
-            INSERT INTO login_details 
-                (id, emp_id, username, password, active, tenant_id)
-            VALUES
-                (:id, :emp_id, :user_name, :password, 'true', :tenant_id) 
-            """,
-            dict(id=id, emp_id=emp_id, user_name=user_name, password=password, tenant_id=tenant_id)
+        user = UserEntity(
+            id = uuid.uuid4(),
+            emp_id = data['emp_id'],
+            username = data['user_name'],
+            password = data['password'],
+            active=True,
+            tenant_id = data['tenant_id']
         )
-        return emp_id
+        uow.session.add(user)
+
+
+        # uow.session.execute(
+        #     """
+        #     INSERT INTO login_details
+        #         (id, emp_id, username, password, active, tenant_id)
+        #     VALUES
+        #         (:id, :emp_id, :user_name, :password, 'true', :tenant_id)
+        #     """,
+        #     dict(id=id, emp_id=emp_id, user_name=user_name, password=password, tenant_id=tenant_id)
+        # )
+        return data['emp_id']
 
     def delete_user_by_id(self, emp_id, uow: SqlUow):
         uow.session.execute(
