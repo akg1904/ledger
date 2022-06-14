@@ -1,5 +1,8 @@
 from src.database.interface.sql_uow import SqlUow
 from src.repository.postgresql.user import UserPostRepository
+from src.shared.exception.error_code import ErrorCode
+from src.shared.exception.error_message import ErrorMessage
+from src.shared.exception.ledger_exception import LedgerException
 
 
 class UserService:
@@ -11,16 +14,17 @@ class UserService:
         user = None
         with uow:
             user = self.userRepository.get_user_by_username(data['user_name'], uow)
-            if not user:
-                emp_id = self.userRepository.create_user(data, uow)
-                uow.commit()
-                created_user = self.userRepository.get_user_by_emp_id(emp_id, uow)
-                if not created_user:
-                    return {'message': 'Failed to create user'}
-                return created_user
+            if user:
+                raise LedgerException(ErrorCode.USER_EXISTS, ErrorMessage.USER_EXISTS)
 
-            else:
-                return {'message': 'User already exists'}
+            emp_id = self.userRepository.create_user(data, uow)
+            uow.commit()
+            created_user = self.userRepository.get_user_by_emp_id(emp_id, uow)
+            if not created_user:
+                raise LedgerException(ErrorCode.USER_CREATION_FAILED, ErrorMessage.USER_CREATION_FAILED)
+
+            return created_user
+
         return user
 
     def get_user_by_username(self, username, uow: SqlUow):
@@ -39,7 +43,8 @@ class UserService:
         users = []
         with uow:
             users = self.userRepository.get_all_user(uow)
-
+            # raise LedgerException(ErrorCode.FAILURE, ErrorMessage.FAILURE)
+            # raise Exception("Exception raised", 5001)
         return users
 
     def update_user_by_emp_id(self, emp_id, uow: SqlUow):
