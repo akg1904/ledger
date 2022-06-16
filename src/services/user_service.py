@@ -37,6 +37,7 @@ class UserService:
         user = None
         with uow:
             user = self.userRepository.get_user_by_emp_id(emp_id, uow)
+
         return user
 
     def get_users(self, uow: SqlUow):

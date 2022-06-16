@@ -1,8 +1,11 @@
 import uuid
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from src.database.entity.tables import UserEntity
 from src.database.interface.sql_uow import SqlUow
 from src.repository.interface.user import UserInterface
+from src.shared.exception.ledger_exception import LedgerException
 
 
 class UserPostRepository(UserInterface):
@@ -11,16 +14,20 @@ class UserPostRepository(UserInterface):
         pass
 
     def create_user(self, data: dict, uow: SqlUow):
-        user = UserEntity(
-            id = uuid.uuid4(),
-            emp_id = data['emp_id'],
-            username = data['user_name'],
-            password = data['password'],
-            active=True,
-            tenant_id = data['tenant_id']
-        )
-        uow.session.add(user)
-
+        try:
+            user = UserEntity(
+                id = uuid.uuid4(),
+                emp_id = data['emp_id'],
+                username = data['user_name'],
+                password = data['password'],
+                active=True,
+                tenant_id = data['tenant_id']
+            )
+            uow.session.add(user)
+            return data['emp_id']
+        except SQLAlchemyError as ex:
+            print(ex)
+            raise LedgerException()
 
         # uow.session.execute(
         #     """
@@ -31,7 +38,6 @@ class UserPostRepository(UserInterface):
         #     """,
         #     dict(id=id, emp_id=emp_id, user_name=user_name, password=password, tenant_id=tenant_id)
         # )
-        return data['emp_id']
 
     def delete_user_by_id(self, emp_id, uow: SqlUow):
         uow.session.execute(

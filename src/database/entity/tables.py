@@ -48,3 +48,9 @@ class UserEntity(TenantBase):
         self.active = active
         self.tenant_id = tenant_id
 
+
+
+
+
+
+
