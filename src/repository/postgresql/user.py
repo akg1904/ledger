@@ -42,7 +42,7 @@ class UserPostRepository(UserInterface):
     def delete_user_by_id(self, emp_id, uow: SqlUow):
         uow.session.execute(
             """
-            DELETE FROM login_details
+            DELETE FROM user_details
             WHERE emp_id = :emp_id""",
             dict(emp_id=emp_id)
         )
@@ -51,7 +51,7 @@ class UserPostRepository(UserInterface):
     def update_user_by_emp_id(self, emp_id, uow: SqlUow):
         uow.session.execute(
             """
-            UPDATE login_details
+            UPDATE user_details
             SET
                 username = 'Abhishek'
             WHERE emp_id = :emp_id""",
@@ -64,7 +64,7 @@ class UserPostRepository(UserInterface):
         response = uow.session.execute(
             """
             SELECT CAST(id as VARCHAR) as id, emp_id, username, tenant_id
-            FROM login_details
+            FROM user_details
             WHERE emp_id = :emp_id""",
             dict(emp_id = emp_id)
         ).first()
@@ -81,7 +81,7 @@ class UserPostRepository(UserInterface):
         response = uow.session.execute(
                         """
                         SELECT CAST(id as VARCHAR) as id, emp_id, username, tenant_id 
-                        FROM login_details 
+                        FROM user_details 
                         WHERE username = :user_name
                         """,
                         dict(user_name = username)
@@ -99,7 +99,7 @@ class UserPostRepository(UserInterface):
         result_set = list(uow.session.execute(
             """
             SELECT CAST(id as VARCHAR) as id, emp_id, username, password, tenant_id 
-            FROM login_details 
+            FROM user_details 
             """
         ))
 

@@ -1,7 +1,9 @@
 import uuid
+from datetime import datetime
 from uuid import uuid4
 
-from sqlalchemy import Column, String, Boolean
+import pytz
+from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -21,9 +23,11 @@ from sqlalchemy.dialects.postgresql import UUID
 GlobalBase = declarative_base(name="GlobalBase")
 TenantBase = declarative_base(name="TenantBase")
 
+tz = pytz.timezone('Asia/Kolkata')
+
 
 class UserEntity(TenantBase):
-    __tablename__ = "login_details"
+    __tablename__ = "user_details"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4(), nullable=False)
     emp_id = Column( String(10), nullable=False)
@@ -31,6 +35,7 @@ class UserEntity(TenantBase):
     password = Column(String(50), unique=True, nullable=False)
     active = Column(Boolean, nullable=False)
     tenant_id = Column(String(20), nullable=False)
+    update_time = Column('update_time', DateTime(timezone=True), nullable=False, default=datetime.now(tz))
 
     def __init__(
             self,
@@ -49,8 +54,21 @@ class UserEntity(TenantBase):
         self.tenant_id = tenant_id
 
 
+class ItemEntity(TenantBase):
+    __tablename__ = "items"
 
+    code = Column('code', String(5), primary_key=True, nullable=False),
+    name = Column('name', String(50), nullable=False),
+    desc = Column('description', String(50), nullable=False)
 
-
+    def __init__(
+            self,
+            code: str,
+            name: str,
+            desc: str
+    ):
+        self.code = code
+        self.name = name
+        self.desc = desc
 
 
