@@ -8,5 +8,5 @@ class Database(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_connection(self):
+    def get_connection(self, **kwargs):
         raise NotImplementedError

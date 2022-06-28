@@ -28,7 +28,7 @@ class PostgresDB(Database):
         )
         PostgresDB.__instance = self.__engine
 
-    def get_connection(self):
+    def get_connection(self, **kwargs):
         if PostgresDB.__instance is None:
-            PostgresDB()
+            PostgresDB(**kwargs)
         return PostgresDB.__instance

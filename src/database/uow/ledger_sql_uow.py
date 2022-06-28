@@ -13,8 +13,8 @@ class LedgerSqlUow(SqlUow):
     """
 
     def __init__(self, session_factory=None):
-        DB_INSTANCE = PostgresDB().get_connection()
-        session_factory = sessionmaker(bind=DB_INSTANCE)
+        DB_Engine = PostgresDB().get_connection()
+        session_factory = sessionmaker(bind=DB_Engine)
         self.session_factory = session_factory
 
     def __enter__(self):

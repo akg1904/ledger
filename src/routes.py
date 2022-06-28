@@ -1,5 +1,6 @@
 from flask_restful import Api
 
+from src.resource.admin.item import ItemResource, ItemDetailResource
 from src.resource.auth.login import LoginResource
 from src.resource.auth.register_resource import RegisterResource
 from src.resource.auth.user_resource import UserResource, UserDetailResource
@@ -12,3 +13,6 @@ def set_api(api: Api):
     api.add_resource(LoginResource, '/login-user')
     api.add_resource(UserResource, '/users')
     api.add_resource(UserDetailResource, '/user/<string:emp_id>')
+    api.add_resource(ItemResource, '/item')
+    api.add_resource(ItemDetailResource, '/item/<code>')
+

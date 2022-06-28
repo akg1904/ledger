@@ -57,8 +57,8 @@ class UserEntity(TenantBase):
 class ItemEntity(TenantBase):
     __tablename__ = "items"
 
-    code = Column('code', String(5), primary_key=True, nullable=False),
-    name = Column('name', String(50), nullable=False),
+    code = Column('code', String(5), primary_key=True, nullable=False)
+    name = Column('name', String(50), nullable=False)
     desc = Column('description', String(50), nullable=False)
 
     def __init__(

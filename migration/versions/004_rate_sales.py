@@ -64,23 +64,6 @@ purchase_detail = Table(
     Column("qty", Float(11), nullable=False)
 )
 
-sales = Table(
-    "sales", metadata,
-    Column("id", UUID(as_uuid=True), primary_key=True, nullable=False),
-    Column("su_id", Integer, nullable=False),
-    Column("bill_no", String(10), nullable=False),
-    Column("date", Date, nullable=False),
-    Column("amount", Float(11), nullable=False)
-)
-
-sales_details = Table(
-    "sales_details", metadata,
-    Column("id", UUID(as_uuid=True), primary_key=True, nullable=False),
-    Column("s_id", UUID(as_uuid=True), nullable=False),
-    Column("item_code", String(10), nullable=False),
-    Column("rate", Float(9), nullable=False),
-    Column("qty", Float(11), nullable=False)
-)
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
