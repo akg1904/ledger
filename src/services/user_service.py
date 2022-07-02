@@ -1,4 +1,4 @@
-from src.database.interface.sql_uow import SqlUow
+from src.infrastructure.interface.sql_uow import SqlUow
 from src.repository.postgresql.admin.user import UserPostRepository
 from src.shared.exception.error_code import ErrorCode
 from src.shared.exception.error_message import ErrorMessage

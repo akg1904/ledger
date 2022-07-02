@@ -13,13 +13,11 @@ items = Table(
 )
 
 
-
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     metadata.bind = migrate_engine
     items.create()
-
 
 
 def downgrade(migrate_engine):

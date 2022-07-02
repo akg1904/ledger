@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 
-from src.database.interface.database import Database
+from src.infrastructure.interface.database import Database
 
 
 class PostgresDB(Database):

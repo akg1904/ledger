@@ -1,7 +1,10 @@
+from typing import List, Dict
 
-from src.database.entity.tables import ItemEntity
-from src.database.interface.sql_uow import SqlUow
+from sqlalchemy.exc import SQLAlchemyError
+
+from src.infrastructure.interface.sql_uow import SqlUow
 from src.repository.interface.item import ItemInterface
+from src.shared.exception.custom_exception import CustomException
 from src.shared.exception.error_code import ErrorCode
 from src.shared.exception.error_message import ErrorMessage
 from src.shared.exception.ledger_exception import LedgerException
@@ -9,97 +12,98 @@ from src.shared.exception.ledger_exception import LedgerException
 
 class ItemRepository(ItemInterface):
 
-    def __init__(self):
-        pass
-
-    def create_item(self, data: dict, uow: SqlUow):
-        # item = ItemEntity(
-        #     code = data['code'],
-        #     name = data['name'],
-        #     desc = data['desc']
-        # )
-        # uow.session.add(item)
+    def create_item(self, data: dict, uow: SqlUow) -> str:
         try:
-            uow.session.execute(
+            uow.get_session().execute(
                 """
-                    INSERT INTO items 
-                    (code, name, description)
-                     VALUES 
-                     (:code, :name, :desc);
+                    insert into items 
+                        (code, name, description)
+                    values
+                        (:code, :name, :desc)
                 """,
-                dict(code = data['code'], name= data['name'], desc= data['desc'])
+                dict(code=data['code'], name=data['name'], desc=data['desc'])
             )
-        except Exception as ex:
-            raise LedgerException(ErrorCode.ITEM_CREATION_FAILED, ErrorMessage.ITEM_CREATION_FAILED)
+            return data['code']
 
-    def get_items(self, uow: SqlUow):
+        except SQLAlchemyError as ex:
+            print("SqlAlchemy error: ", ex)
+            raise CustomException(ErrorCode.SQL_ALCHEMY.value, str(ex))
+        except LedgerException as ex:
+            raise ex
+        except Exception as ex:
+            print("Exception error: ", ex)
+            raise LedgerException(ErrorCode.ITEM_NOT_CREATED, ErrorMessage.ITEM_NOT_CREATED)
+
+    def get_items(self, uow: SqlUow) -> List[Dict]:
         try:
-            result = list(uow.session.execute(
+            result = list(uow.get_session().execute(
                 """
-                SELECT code, name, description 
-                FROM items
+                    select code, name, description from items
                 """
             ))
+            items = []
             if result:
-                items = []
                 for item in result:
-                    temp = {
-                        'code': item.code,
-                        'name': item.name,
-                        'desc': item.description
-                    }
-                    items.append(temp)
+                    items.append(dict(item))
+            return items
 
-                return items
+        except SQLAlchemyError as ex:
+            raise CustomException(ErrorCode.SQL_ALCHEMY.value, str(ex))
+        except LedgerException as ex:
+            raise ex
         except Exception as ex:
-            print(ex)
+            raise LedgerException(ErrorCode.ITEM_FETCH_ERROR, ErrorMessage.ITEM_FETCH_ERROR)
 
-    def get_item_by_code(self, code, uow: SqlUow):
+    def get_item_by_code(self, code: str, uow: SqlUow):
+        print(code)
         try:
-            item = None
-            result = uow.session.execute(
+            result = uow.get_session().execute(
                 """
-                SELECT code, name, description
-                FROM items
-                WHERE code = :code
+                    select name, description from items
+                    where code = (:code)
                 """,
                 dict(code=code)
             ).first()
             if result:
-                item = {
-                    'code': result.code,
-                    'name': result.name,
-                    'desc': result.description
-                }
-            return item
+                return dict(result)
+
+            return None
+        except SQLAlchemyError as ex:
+            raise CustomException(ErrorCode.SQL_ALCHEMY.value, str(ex))
+        except LedgerException as ex:
+            raise ex
         except Exception as ex:
-            print(ex)
+            raise LedgerException(ErrorCode.ITEM_FETCH_ERROR, ErrorMessage.ITEM_FETCH_ERROR)
 
     def update_item_by_code(self, code: str, data: dict, uow: SqlUow):
         try:
-            uow.session.execute(
+            uow.get_session().execute(
                 """
-                UPDATE items
-                SET
-                    name = :name
-                WHERE code = :code
+                    Update items set name = :name where code= :code                   
                 """,
-                dict(name=data['name'], code=code)
+                dict(code=code, name=data['name'])
             )
+            return code
+        except SQLAlchemyError as ex:
+            raise CustomException(ErrorCode.SQL_ALCHEMY.value, str(ex.args))
+        except LedgerException as ex:
+            raise ex
         except Exception as ex:
-            print(ex)
+            raise LedgerException(ErrorCode.ITEM_UPDATING_ERROR, ErrorMessage.ITEM_UPDATING_ERROR)
 
-    def delete_item_by_code(self, code, uow: SqlUow):
+    def delete_item_by_code(self, code: str, uow: SqlUow):
         try:
-            uow.session.execute(
+            uow.get_session().execute(
                 """
-                DELETE From items
-                WHERE code = :code
+                    Delete from items where code = :code
                 """,
                 dict(code=code)
             )
+            return code
+        except SQLAlchemyError as ex:
+            raise CustomException(ErrorCode.SQL_ALCHEMY.value, ErrorMessage.SQL_ALCHEMY.value)
+        except LedgerException as ex:
+            raise ex
         except Exception as ex:
-            print(ex)
-
-
+            raise LedgerException(ErrorCode.ITEM_DELETING_ERROR, ErrorMessage.ITEM_DELETING_ERROR)
 

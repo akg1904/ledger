@@ -92,6 +92,7 @@ def upgrade(migrate_engine):
     supplier.create()
     customer.create()
     purchase.create()
+    purchase_detail.create()
 
 
 def downgrade(migrate_engine):
@@ -102,4 +103,5 @@ def downgrade(migrate_engine):
     supplier.drop()
     customer.drop()
     purchase.drop()
+    purchase_detail.drop()
 

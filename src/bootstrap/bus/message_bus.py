@@ -1,4 +1,4 @@
-from src.database.interface.sql_uow import SqlUow
+from src.infrastructure.interface.sql_uow import SqlUow
 
 
 class MessageBus:

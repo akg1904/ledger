@@ -13,7 +13,7 @@ class UserSqlite(UserInterface):
         password = data['password']
         tenant_id = data['tenant_id']
 
-        uow.session.execute(
+        uow._session.execute(
             """
             INSERT INTO login_details 
                 (id, emp_id, username, password, active, tenant_id)

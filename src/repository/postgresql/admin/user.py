@@ -2,8 +2,8 @@ import uuid
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from src.database.entity.tables import UserEntity
-from src.database.interface.sql_uow import SqlUow
+from src.infrastructure.entity.tables import UserEntity
+from src.infrastructure.interface.sql_uow import SqlUow
 from src.repository.interface.user import UserInterface
 from src.shared.exception.ledger_exception import LedgerException
 
@@ -23,13 +23,13 @@ class UserPostRepository(UserInterface):
                 active=True,
                 tenant_id = data['tenant_id']
             )
-            uow.session.add(user)
+            uow.get_session().add(user)
             return data['emp_id']
         except SQLAlchemyError as ex:
             print(ex)
             raise LedgerException()
 
-        # uow.session.execute(
+        # uow.get_session().execute(
         #     """
         #     INSERT INTO login_details
         #         (id, emp_id, username, password, active, tenant_id)
@@ -40,7 +40,7 @@ class UserPostRepository(UserInterface):
         # )
 
     def delete_user_by_id(self, emp_id, uow: SqlUow):
-        uow.session.execute(
+        uow.get_session().execute(
             """
             DELETE FROM user_details
             WHERE emp_id = :emp_id""",
@@ -49,7 +49,7 @@ class UserPostRepository(UserInterface):
         return {"msg": "Record Deleted"}
 
     def update_user_by_emp_id(self, emp_id, uow: SqlUow):
-        uow.session.execute(
+        uow.get_session().execute(
             """
             UPDATE user_details
             SET
@@ -61,7 +61,7 @@ class UserPostRepository(UserInterface):
 
     def get_user_by_emp_id(self, emp_id, uow: SqlUow):
 
-        response = uow.session.execute(
+        response = uow.get_session().execute(
             """
             SELECT CAST(id as VARCHAR) as id, emp_id, username, tenant_id
             FROM user_details
@@ -78,7 +78,7 @@ class UserPostRepository(UserInterface):
 
     def get_user_by_username(self, username, uow: SqlUow):
         user = None
-        response = uow.session.execute(
+        response = uow.get_session().execute(
                         """
                         SELECT CAST(id as VARCHAR) as id, emp_id, username, tenant_id 
                         FROM user_details 
@@ -96,7 +96,7 @@ class UserPostRepository(UserInterface):
         return user
 
     def get_all_user(self, uow: SqlUow):
-        result_set = list(uow.session.execute(
+        result_set = list(uow.get_session().execute(
             """
             SELECT CAST(id as VARCHAR) as id, emp_id, username, password, tenant_id 
             FROM user_details 

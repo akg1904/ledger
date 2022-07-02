@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker, Session
 
-from src.database.db.postgresql import PostgresDB
-from src.database.interface.sql_uow import SqlUow
+from src.infrastructure.db.postgresql import PostgresDB
+from src.infrastructure.interface.sql_uow import SqlUow
 
 
 # DEFAULT_SESSION_FACTORY = app.config['DB_SESSION']
@@ -16,20 +16,21 @@ class LedgerSqlUow(SqlUow):
         DB_Engine = PostgresDB().get_connection()
         session_factory = sessionmaker(bind=DB_Engine)
         self.session_factory = session_factory
+        super().__init__()
 
     def __enter__(self):
-        self.session: Session = self.session_factory()
+        self._session: Session = self.session_factory()
         return super().__enter__()
 
     def __exit__(self, *args):
         super().__exit__(*args)
-        self.session.close()
+        self._session.close()
 
     def _commit(self):
-        self.session.commit()
+        self._session.commit()
 
     def rollback(self):
-        self.session.rollback()
+        self._session.rollback()
 
 
 
