@@ -1,4 +1,4 @@
-from src.repository.postgresql.admin.user import UserPostRepository
+from src.repository.postgresql.auth.user import UserPostRepository
 
 
 class LoginService:

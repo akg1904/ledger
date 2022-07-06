@@ -8,7 +8,7 @@ def upgrade(migrate_engine):
     metadata = MetaData(bind=migrate_engine)
     item = Table("items", metadata, autoload=True)
     rate = Table("rate", metadata, autoload=True)
-    ForeignKeyConstraint([rate.c.item_code], [item.c.code]).create()
+    ForeignKeyConstraint([rate.c.item_code], [item.c.code], onupdate="CASCADE", ondelete="CASCADE").create()
 
 
 def downgrade(migrate_engine):
@@ -16,5 +16,5 @@ def downgrade(migrate_engine):
     metadata = MetaData(bind=migrate_engine)
     item = Table("items", metadata, autoload=True)
     rate = Table("rate", metadata, autoload=True)
-    ForeignKeyConstraint([rate.c.item_code], [item.c.code]).drop()
+    ForeignKeyConstraint([rate.c.item_code], [item.c.code], onupdate="CASCADE", ondelete="CASCADE").drop()
 

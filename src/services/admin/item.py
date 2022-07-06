@@ -1,4 +1,5 @@
 from src.infrastructure.interface.sql_uow import SqlUow
+from src.repository.interface.item import ItemInterface
 from src.repository.postgresql.admin.item import ItemRepository
 from src.shared.exception.custom_exception import CustomException
 from src.shared.exception.error_code import ErrorCode
@@ -9,7 +10,7 @@ from src.shared.exception.ledger_exception import LedgerException
 class ItemService:
 
     def __init__(self):
-        self.item_repository = ItemRepository()
+        self.item_repository: ItemInterface = ItemRepository()
 
     def create_item(self, data: dict, uow: SqlUow) -> str:
         try:
@@ -72,6 +73,9 @@ class ItemService:
     def delete_item_by_code(self, code: str, uow: SqlUow):
         try:
             with uow:
+                item = self.item_repository.get_item_by_code(code, uow)
+                if not item:
+                    raise LedgerException(ErrorCode.ITEM_ALREADY_DELETED, ErrorMessage.ITEM_ALREADY_DELETED)
                 response = self.item_repository.delete_item_by_code(code, uow)
                 uow.commit()
                 return response

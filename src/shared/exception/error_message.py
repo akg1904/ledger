@@ -16,6 +16,14 @@ class ErrorMessage(Enum):
     ITEM_UPDATING_ERROR = 'Item Updating failed'
     ITEM_DELETING_ERROR = 'Item Deleting failed'
     ITEM_NOT_FOUND = 'Item not found'
+    ITEM_ALREADY_DELETED = 'Item already deleted'
+    RATE_INSERTION_ERROR = 'Rate insertion failed'
+    RATE_DELETING_ERROR = 'Rate Deleting Failed'
+    RATE_FETCHING_ERROR = 'Rate Fetching Failed'
+    RATE_UPDATING_ERROR = 'Rate Updating Failed'
+    RATE_RECORD_NOT_FOUND = 'Record not found'
+
+
 
 
 

@@ -7,7 +7,7 @@ from src.infrastructure.interface.sql_uow import SqlUow
 class ItemInterface(abc.ABC):
 
     @abc.abstractmethod
-    def create_item(self, data: dict, uow: SqlUow) -> None:
+    def create_item(self, data: dict, uow: SqlUow) -> str:
         raise NotImplementedError
 
     @abc.abstractmethod

@@ -1,4 +1,6 @@
-from sqlalchemy import MetaData, Table, Column, String, Integer, Date, Float, FLOAT
+from uuid import uuid4
+
+from sqlalchemy import MetaData, Table, Column, String, Integer, Date, Float
 from migrate import *
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -6,7 +8,7 @@ metadata = MetaData()
 
 rate_sales = Table(
     "rate", metadata,
-    Column("id", String(10), primary_key=True, nullable=False),
+    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4(), nullable=False),
     Column("item_code", String(5), nullable=False),
     Column("p_rate", Float(9), nullable=False),
     Column("s_rate", Float(9), nullable=False)
@@ -42,7 +44,7 @@ customer = Table(
     Column("state", String(20), nullable=True),
     Column("country", String(20), nullable=True),
     Column("pincode", Integer, nullable=True),
-    Column("contact_no", Integer, nullable=True)
+    Column("contact_no", Integer, unique=True, nullable=True)
 )
 
 purchase = Table(
@@ -63,24 +65,6 @@ purchase_detail = Table(
     Column("rate", Float(9), nullable=False),
     Column("qty", Float(11), nullable=False)
 )
-
-# sales = Table(
-#     "sales", metadata,
-#     Column("id", UUID(as_uuid=True), primary_key=True, nullable=False),
-#     Column("su_id", Integer, nullable=False),
-#     Column("bill_no", String(10), nullable=False),
-#     Column("date", Date, nullable=False),
-#     Column("amount", Float(11), nullable=False)
-# )
-#
-# sales_details = Table(
-#     "sales_details", metadata,
-#     Column("id", UUID(as_uuid=True), primary_key=True, nullable=False),
-#     Column("s_id", UUID(as_uuid=True), nullable=False),
-#     Column("item_code", String(10), nullable=False),
-#     Column("rate", Float(9), nullable=False),
-#     Column("qty", Float(11), nullable=False)
-# )
 
 
 def upgrade(migrate_engine):

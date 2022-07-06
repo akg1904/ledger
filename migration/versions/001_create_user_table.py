@@ -8,7 +8,7 @@ metadata = MetaData()
 
 user = Table(
     "user_details", metadata,
-    Column('id', UUID(as_uuid=True), primary_key=True, default=uuid4, nullable=False),
+    Column('id', UUID(as_uuid=True), primary_key=True, default=uuid4(), nullable=False),
     Column('emp_id', String(10), nullable=False),
     Column('username', String(50), unique=True, nullable=False),
     Column('password', String(50), unique=False, nullable=False),

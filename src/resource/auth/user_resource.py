@@ -1,5 +1,5 @@
 from src.resource.base import BaseResource
-from src.services.user_service import UserService
+from src.services.auth.user_service import UserService
 from src.shared.exception.ledger_exception import LedgerException
 from src.shared.response.response_data import response_payload
 
