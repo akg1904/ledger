@@ -22,6 +22,6 @@ class RateServiceInterface(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def delete_rate_by_id(self, ids: str, uow: SqlUow):
+    def delete_rate_by_id(self, ids: str, code: str, uow: SqlUow):
         raise NotImplementedError
 

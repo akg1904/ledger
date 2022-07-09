@@ -62,7 +62,7 @@ class RateDetailResource(BaseResource):
 
     def delete(self, **kwargs):
         try:
-            response = rate_service.delete_rate_by_id(kwargs['rate_id'], self.message_bus.uow)
+            response = rate_service.delete_rate_by_id(kwargs['rate_id'], kwargs['item_code'], self.message_bus.uow)
             return response_payload(None, "Record Deleted")
         except CustomException as ex:
             return response_payload(None, ex.message, ex.code, False), 400

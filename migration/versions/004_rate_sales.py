@@ -16,9 +16,9 @@ rate_sales = Table(
 
 stock = Table(
     "stock", metadata,
-    Column("id", String(10), primary_key=True, nullable=False),
+    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4(), nullable=False),
     Column("item_code", String(10), nullable=False),
-    Column("r_id", String(10), nullable=False),
+    Column("r_id", UUID(as_uuid=True), nullable=False),
     Column("qty", Integer, nullable=False)
 )
 

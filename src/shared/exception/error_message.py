@@ -22,6 +22,8 @@ class ErrorMessage(Enum):
     RATE_FETCHING_ERROR = 'Rate Fetching Failed'
     RATE_UPDATING_ERROR = 'Rate Updating Failed'
     RATE_RECORD_NOT_FOUND = 'Record not found'
+    STOCK_INSERTION_ERROR = 'STOCK insertion failed'
+
 
 
 

@@ -73,9 +73,11 @@ class RateService(RateServiceInterface):
         except Exception as ex:
             raise LedgerException(ErrorCode.RATE_UPDATING_ERROR, ErrorMessage.RATE_UPDATING_ERROR)
 
-    def delete_rate_by_id(self, ids: str, uow: SqlUow):
+    def delete_rate_by_id(self, ids: str, code: str, uow: SqlUow):
         try:
             with uow:
+                if not self.rate_repository.get_rate_by_id(ids, code, uow):
+                    raise LedgerException(ErrorCode.ITEM_ALREADY_DELETED, ErrorMessage.ITEM_ALREADY_DELETED)
                 response = self.rate_repository.delete_rate_by_id(ids, uow)
                 uow.commit()
                 return response
