@@ -41,6 +41,7 @@ class ItemResource(BaseResource):
 
 class ItemDetailResource(BaseResource):
 
+
     def get(self, **kwargs):
         try:
             item = item_service.get_item_by_code(kwargs['code'], self.message_bus.uow)

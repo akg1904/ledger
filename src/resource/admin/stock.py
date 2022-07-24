@@ -1,3 +1,4 @@
+
 from flask import request
 
 from src.resource.base import BaseResource
@@ -13,14 +14,22 @@ stock_service: StockServiceInterface = StockService()
 class StockResource(BaseResource):
 
     def get(self, **kwargs):
-        response = stock_service.get_stock_by_item_code(kwargs['item_code'], self.message_bus.uow)
-        return response
+        try:
+            response = stock_service.get_stock_by_item_code(kwargs['item_code'], self.message_bus.uow)
+            return response_payload(response, "Stock Record"), 200
+        except CustomException as ex:
+            return response_payload(None, ex.message, ex.code, False), 400
+        except LedgerException as ex:
+            return response_payload(None, ex.message.value, ex.code.value, False), 400
+        except Exception as ex:
+            return response_payload(None, ex.args, 4000, False), 400
 
     def post(self, **kwargs):
         try:
             data = request.get_json()
+            print(data)
             response = stock_service.create_stock(data, kwargs['item_code'], kwargs['rate_id'], self.message_bus.uow)
-            return response_payload(response), 200
+            return response_payload(response, "Record Created"), 200
         except CustomException as ex:
             return response_payload(None, ex.message, ex.code, False), 400
         except LedgerException as ex:
