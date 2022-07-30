@@ -80,17 +80,18 @@ class UserPostRepository(UserInterface):
         user = None
         response = uow.get_session().execute(
                         """
-                        SELECT CAST(id as VARCHAR) as id, emp_id, username, tenant_id 
+                        SELECT CAST(id as VARCHAR) as id, emp_id, username, password, tenant_id 
                         FROM user_details 
                         WHERE username = :user_name
                         """,
-                        dict(user_name = username)
+                        dict(user_name=username)
                     ).first()
         if response is not None:
             user = {
                 'id': response.id,
                 'emp_id': response.emp_id,
                 'user_name': response.username,
+                'password': response.password,
                 'tenant_id': response.tenant_id
             }
         return user

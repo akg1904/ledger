@@ -9,6 +9,8 @@ class ErrorMessage(Enum):
     SQL_ALCHEMY = "Sql Alchemy exception"
     USER_EXISTS = 'User already exists'
     USER_CREATION_FAILED = 'Failed to create user'
+    USER_NOT_FOUND = 'User not found'
+    INVALID_PASSWORD = 'Invalid password'
     ITEM_CREATION_FAILED = 'Failed to create item'
     ITEM_NOT_CREATED = 'Item not created'
     ITEM_ALREADY_EXISTS = 'Item already present'

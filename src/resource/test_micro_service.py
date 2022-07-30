@@ -28,21 +28,6 @@ class Test(BaseResource):
 
         return {"token": token, "message": "token generated"}
 
-    @login_validate
-    def put(self):
-        token = request.headers.get('TOKEN')
-        token_key = "ledger_" + token
-
-        # if self.message_bus.redis.get(token_key):
-        #     data = self.message_bus.redis.get(token_key)
-        #
-        #     self.message_bus.redis.setex(token_key, timedelta(seconds=int(20)), data)
-        #
-        #     return {"data": json.loads(data), "message": "data found"}
-        #
-        #
-        # return {"message": "invalid token"}, 401
-
 
 
 

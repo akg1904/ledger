@@ -5,6 +5,7 @@ from flask import request
 
 from src.resource.base import BaseResource
 from src.services.admin.item import ItemService
+from src.shared.decorators.auth import login_validate
 from src.shared.exception.custom_exception import CustomException
 from src.shared.exception.ledger_exception import LedgerException
 from src.shared.response.response_data import response_payload
@@ -41,8 +42,8 @@ class ItemResource(BaseResource):
 
 class ItemDetailResource(BaseResource):
 
-
-    def get(self, **kwargs):
+    @login_validate
+    def get(self, *args, **kwargs):
         try:
             item = item_service.get_item_by_code(kwargs['code'], self.message_bus.uow)
             return response_payload(item, "item received"), 200
